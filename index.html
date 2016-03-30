@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <div id="interpolation"></div>
+        <br />
+        <div id="total"></div>
+        <br />
+        <div id="ifElse"></div>
+        <br />
+        <div id="arrays"></div>
+        <br />
+        <div id="encode"></div>
+
+        <script id="interpolationtmpl" type="text/x-dot-template">
+            <div>Hi {{=it.name}}!,u are {{=it.age || '未知'}}</div>
+        </script>
+
+         <script id="cal" type="text/x-dot-template">
+            <div>sum is：{{= it.num1+it.num2}}</div>
+        </script>
+
+        <script id="conditionstmpl" type="text/x-dot-template">
+            {{? !!it.name }}
+                <div>Oh, I love your name, {{=it.name}}!</div>
+            {{??}} 
+                <div>Oh, I love you but whats ur name?</div>
+            {{?}}
+        </script>
+
+        <script id="arraystmpl" type="text/x-dot-template">
+            {{~it.array:value:index}}
+                <div>{{= index+1 }}{{= value }}!</div>
+            {{~}}
+        </script>
+
+        <script id="encodetmpl" type="text/x-dot-template">
+            Visit {{!it.uri}} {{!it.html}}
+        </script>
+
+        <script src="jquery.js"></script>
+        <script src="doT.min.js"></script>
+        <script>
+            (function(){
+                // doT 三步骤 1.拿出来 2.塞数据 3.渲染到 dom 中
+                var dataInter = {name:"Jake",age:22}; // 若 age 为 falsy 值，则显示未知
+                var interText = doT.template(document.getElementById('interpolationtmpl').innerHTML);
+                document.getElementById('interpolation').innerHTML = interText(dataInter);
+            })();
+
+            (function(){
+                var dataInter = {num1: 10,num2: 20};
+                var interText = doT.template(document.getElementById('cal').innerHTML);
+                document.getElementById('total').innerHTML = interText(dataInter);
+            })();
+
+            (function(){
+                var dataInter = {name:"Jake"};
+                var interText = doT.template(document.getElementById('conditionstmpl').innerHTML);
+                document.getElementById('ifElse').innerHTML = interText(dataInter);
+            })();
+
+            (function(){
+                var dataArr = {"array":["banana","apple","orange"]};
+                var interText = doT.template(document.getElementById('arraystmpl').innerHTML);
+                document.getElementById('arrays').innerHTML = interText(dataArr);
+            })();
+
+            (function(){
+                var dataEncode = {"uri":"http://bebedo.com/?keywords=Yoga","html":"<div style='background: #f00; height: 30px; line-height: 30px;'>html元素</div>"};
+                var EncodeText = doT.template($("#encodetmpl").text());
+                $("#encode").html(EncodeText(dataEncode));
+            })();
+        </script>
+    </body>
+</html>
